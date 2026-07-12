@@ -1,0 +1,72 @@
+import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+
+const links = [
+  { label: 'Services', href: '#services' },
+  { label: 'Technology', href: '#technology' },
+  { label: 'Impact', href: '#impact' },
+  { label: 'Contact', href: '#contact' },
+]
+
+export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  return (
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-14 py-4 transition-all duration-500 ${
+        scrolled ? 'bg-white/80 backdrop-blur-2xl border-b border-slate-200/60' : 'bg-transparent'
+      }`}
+    >
+      <a href="#" className="flex items-center gap-3">
+        <img src="https://raw.githubusercontent.com/inder20216/openmind-assets/main/logo.png" alt="OpenMind Logo" className="h-8 w-auto" />
+      </a>
+
+      <div className="hidden md:flex items-center gap-10">
+        {links.map((l) => (
+          <a key={l.href} href={l.href} className="text-sm font-medium text-slate-400 hover:text-slate-700 transition-colors duration-300">
+            {l.label}
+          </a>
+        ))}
+        <a
+          href="#contact"
+          className="px-6 py-2.5 bg-ox text-white text-xs font-semibold rounded-full shadow-lg shadow-ox/20 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+        >
+          Get a Demo
+        </a>
+      </div>
+
+      <button className="md:hidden text-slate-400" onClick={() => setMenuOpen(!menuOpen)}>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          {menuOpen ? <path d="M6 6l12 12M18 6l-12 12" /> : <path d="M4 6h16M4 12h16M4 18h16" />}
+        </svg>
+      </button>
+
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="absolute top-full left-0 right-0 bg-white/95 backdrop-blur-2xl border-b border-slate-200 p-6 flex flex-col gap-5 md:hidden"
+          >
+            {links.map((l) => (
+              <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)} className="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors">
+                {l.label}
+              </a>
+            ))}
+            <a href="#contact" onClick={() => setMenuOpen(false)} className="text-sm font-semibold text-ox">
+              Get a Demo →
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
+  )
+}
