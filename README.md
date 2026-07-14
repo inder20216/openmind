@@ -1,16 +1,23 @@
-# React + Vite
+# Open Mind Services Limited — Website Rebuild
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React + Vite rebuild of [openmind.in](https://www.openmind.in), replacing the existing WordPress site.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 19 + Vite
+- Tailwind CSS v4
+- Framer Motion for animation
+- Build-time prerendering (`scripts/prerender.mjs`) so crawlers and AI answer engines see real static HTML, not an empty SPA shell
 
-## React Compiler
+## Development
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+npm run dev      # local dev server
+npm run build    # production build + prerender
+npm run preview  # preview the production build
+```
 
-## Expanding the Oxlint configuration
+## SEO / AEO
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+`public/robots.txt`, `public/sitemap.xml`, and `public/llms.txt` cover crawler and AI-answer-engine discoverability. `index.html` carries Open Graph, Twitter card, and JSON-LD Organization structured data.
