@@ -25,7 +25,7 @@ export default function Navbar() {
       }`}
     >
       <a href="#" className="flex items-center gap-3">
-        <img src="https://raw.githubusercontent.com/inder20216/openmind-assets/main/logo.png" alt="OpenMind Logo" className="h-8 w-auto" />
+        <img src="https://raw.githubusercontent.com/inder20216/openmind-assets/main/logo.png" alt="OpenMind Logo" className="h-12 w-auto -my-2" />
       </a>
 
       <div className="hidden md:flex items-center gap-10">

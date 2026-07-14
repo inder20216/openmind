@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ox: #f97316;
-  --color-ob: #2563eb;
-  --color-ogrey: #f1f5f9;
+  --color-ox: #ff7a00;
+  --color-ob: #3b82f6;
+  --color-ogrey: #f8fafc;
   --color-odark: #0f172a;
 }
 
@@ -32,11 +32,11 @@ body {
   background: #94a3b8;
 }
 
-@keyframes marquee {
+@keyframes marquee-half {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
 
-.animate-marquee {
-  animation: marquee 30s linear infinite;
+.animate-marquee-half {
+  animation: marquee-half 55s linear infinite;
 }

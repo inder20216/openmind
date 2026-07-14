@@ -1,7 +1,8 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import Navbar from './components/Navbar'
-import headsetImg from './assets/headset.png'
+import ChatVoiceWidget from './components/ChatVoiceWidget'
+import aiImage from './assets/ai-image3.png'
 import workflowImg from './assets/workflow.png'
 import callcenterVideo from './assets/Callcenter.mp4'
 import voicebotsVideo from './assets/Voicebots.mp4'
@@ -22,112 +23,168 @@ function FadeInSection({ children, className = '', delay = 0 }) {
   )
 }
 
+/* ─── MARQUEE CONTENT ─── */
+const industries = ['Healthcare', 'E-commerce', 'Banking', 'FinTech', 'Education', 'Hospitality', 'Enterprise', 'Logistics', 'Telecom', 'Manufacturing', 'Government', 'Retail']
+const benefits = [
+  { icon: '⚡', text: 'Up to 70% Faster Response' },
+  { icon: '🤖', text: 'Up to 80% Automated Queries' },
+  { icon: '📈', text: 'Higher Customer Satisfaction' },
+  { icon: '🎯', text: 'Improved First Contact Resolution' },
+  { icon: '👨‍💼', text: 'Increased Agent Productivity' },
+  { icon: '🌐', text: 'Enhanced Customer Experience' },
+]
+
+const dotColors = ['bg-ox', 'bg-ob', 'bg-purple-500']
+
+const marqueeSequence = [
+  { type: 'label', icon: '🏢', text: 'Industries Served' },
+  ...industries.map((text) => ({ type: 'item', text })),
+  { type: 'divider' },
+  { type: 'label', icon: '🚀', text: 'Business Benefits' },
+  ...benefits.map((b) => ({ type: 'item', text: b.text, icon: b.icon })),
+]
+const marqueeRow = [...marqueeSequence, ...marqueeSequence]
+
 /* ─── HERO ─── */
 function HeroSection() {
   const heroRef = useRef(null)
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
-  const headsetY = useTransform(scrollYProgress, [0, 1], [0, 100])
+  let itemIndex = 0
 
   return (
-    <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white">
+    <section ref={heroRef} className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white pt-16 pb-10 md:pt-20 md:pb-12">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-[0.4]" style={{
         backgroundImage: `radial-gradient(circle at 1px 1px, #cbd5e1 1px, transparent 0)`,
         backgroundSize: '40px 40px'
       }} />
 
-      {/* Headset merged into background, right side */}
-      <motion.img
-        src={headsetImg}
-        alt=""
-        aria-hidden="true"
-        style={{ y: headsetY }}
-        initial={{ opacity: 0, scale: 0.9, rotate: 0 }}
-        animate={{ opacity: 0.9, scale: 1, rotate: 10 }}
-        transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none select-none absolute -right-20 md:-right-40 top-1/2 -translate-y-1/2 w-[120vw] max-w-[1400px] min-w-[900px] drop-shadow-[0_40px_80px_rgba(249,115,22,0.15)]"
-      />
-      {/* Glow behind headset to blend it into the dark theme */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[90vw] h-[90vw] max-w-[66rem] max-h-[66rem] bg-gradient-to-br from-ox/20 via-ob/10 to-transparent rounded-full blur-[100px]" />
+      {/* Glow behind the ecosystem illustration */}
+      <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[40vw] h-[40vw] max-w-[30rem] max-h-[30rem] bg-gradient-to-br from-ox/15 via-ob/10 to-transparent rounded-full blur-[100px]" />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-16 py-32">
-        <div className="max-w-3xl">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-16">
+        {/* Industries + Outcomes marquee, flush against the navbar, continuous loop */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="mb-4 md:mb-5 -mx-6 md:-mx-16 overflow-hidden py-1.5"
+        >
+          <div className="flex items-center w-max gap-4 md:gap-5 animate-marquee-half motion-reduce:animate-none hover:[animation-play-state:paused]">
+            {marqueeRow.map((entry, i) => {
+              if (entry.type === 'divider') {
+                return <span key={i} className="flex-shrink-0 w-px h-5 bg-gradient-to-b from-transparent via-slate-300 to-transparent" />
+              }
+              if (entry.type === 'label') {
+                return (
+                  <span
+                    key={i}
+                    className="flex-shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-ob via-purple-600 to-ox text-white text-xs md:text-sm font-bold tracking-wide shadow-[0_4px_16px_-2px_rgba(124,58,237,0.4)] whitespace-nowrap"
+                  >
+                    <span aria-hidden="true">{entry.icon}</span>
+                    {entry.text}
+                  </span>
+                )
+              }
+              const dot = dotColors[itemIndex % dotColors.length]
+              itemIndex += 1
+              return (
+                <span
+                  key={i}
+                  className="flex-shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-blue-100/80 via-purple-100/80 to-orange-100/80 backdrop-blur-md border border-white/70 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_6px_18px_-6px_rgba(59,130,246,0.18),0_6px_18px_-6px_rgba(249,115,22,0.12)] text-xs md:text-sm font-semibold text-slate-700 whitespace-nowrap transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_2px_4px_rgba(15,23,42,0.06),0_10px_28px_-6px_rgba(124,58,237,0.35)]"
+                >
+                  {entry.icon ? (
+                    <span aria-hidden="true">{entry.icon}</span>
+                  ) : (
+                    <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
+                  )}
+                  {entry.text}
+                </span>
+              )
+            })}
+          </div>
+        </motion.div>
+
+        {/* Mobile: contained image above the text */}
+        <motion.img
+          src={aiImage}
+          alt="Open Mind AI intelligence engine connecting voice bots, chatbots, automation, CRM and analytics"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="md:hidden w-full max-w-md mx-auto mb-8"
+        />
+
+        <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-start">
+        <div className="max-w-2xl">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight text-slate-900"
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-extrabold leading-[1.15] tracking-tight text-slate-900"
           >
-            Intelligence That<br />
-            <span className="bg-gradient-to-r from-ox via-orange-300 to-ob bg-clip-text text-transparent">
-              Understands & Responds
+            <span className="sm:whitespace-nowrap">Customer Experience Solutions</span><br />
+            <span className="sm:whitespace-nowrap bg-gradient-to-r from-ox via-purple-500 to-ob bg-clip-text text-transparent">
+              That Fit Your Business
             </span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-6 text-base md:text-lg text-slate-500 max-w-xl leading-relaxed"
+            transition={{ duration: 0.8, delay: 0.45 }}
+            className="mt-4 text-base md:text-lg font-semibold text-slate-700"
           >
-            From first contact to lasting loyalty — we blend AI-powered automation with human expertise to deliver customer experiences that build businesses.
+            <span className="text-ox">Traditional Contact Centers</span> •{' '}
+            <span className="text-ob">AI Automation</span> •{' '}
+            <span className="text-purple-600">Or the Perfect Hybrid</span>
+          </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="mt-3 text-sm md:text-base text-slate-500 max-w-lg leading-relaxed"
+          >
+            Whether you need experienced customer support teams, AI-powered automation, or{' '}
+            <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-ox to-ob">a combination of both</span>,
+            {' '}Open Mind helps you deliver exceptional customer experiences at every stage.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="mt-10 flex gap-4 flex-wrap"
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="mt-8 flex gap-4 flex-wrap"
           >
             <a
               href="#services"
-              className="px-8 py-3.5 bg-ox text-white text-sm font-semibold rounded-full shadow-lg shadow-ox/20 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+              className="px-7 py-3 bg-ox text-white text-sm font-semibold rounded-full shadow-lg shadow-ox/20 hover:shadow-xl hover:-translate-y-0.5 hover:scale-[1.02] transition-all duration-300"
             >
-              Explore Our Services
+              Explore Services
             </a>
             <a
               href="#contact"
-              className="px-8 py-3.5 border border-slate-200 text-slate-500 text-sm font-medium rounded-full hover:border-slate-300 hover:text-slate-700 transition-all duration-300"
+              className="px-7 py-3 border border-slate-200 text-slate-500 text-sm font-medium rounded-full hover:border-slate-300 hover:text-slate-700 hover:-translate-y-0.5 hover:scale-[1.02] transition-all duration-300"
             >
-              Get a Demo
+              Book a Demo
             </a>
           </motion.div>
+        </div>
 
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.2 }}
-            className="mt-16 flex items-center gap-8 text-xs text-slate-400"
+            initial={{ opacity: 0, scale: 0.95, x: 24 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="hidden md:flex items-start justify-center"
           >
-            {[
-              { label: '24/7 Multilingual Support', color: 'bg-ox' },
-              { label: 'NASSCOM Member', color: 'bg-ob' },
-              { label: 'ISO Certified', color: 'bg-emerald-400' },
-            ].map((s) => (
-              <span key={s.label} className="flex items-center gap-2">
-                <span className={`w-1.5 h-1.5 rounded-full ${s.color}`} />
-                {s.label}
-              </span>
-            ))}
+            <img
+              src={aiImage}
+              alt="Open Mind AI intelligence engine connecting voice bots, chatbots, automation, CRM and analytics"
+              className="w-full h-auto max-h-[416px] object-contain"
+            />
           </motion.div>
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
-      >
-        <motion.svg
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="text-slate-300" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-        >
-          <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
-        </motion.svg>
-      </motion.div>
     </section>
   )
 }
@@ -322,38 +379,6 @@ function ServiceSection({ service, index }) {
   )
 }
 
-/* ─── KPI STRIP ─── */
-function KPIStrip() {
-  const items = [
-    'Inbound Call Center Outsourcing',
-    'Generative AI IVR',
-    '24/7 Multilingual Support',
-    'AI + Human Hybrid Teams',
-    'Seamless Human Escalation',
-    'NASSCOM Member',
-    'ISO Certified',
-    'Trusted by Apollo Hospitals',
-    'Trusted by Cloud Nine Hospitals',
-    'Trusted by Jafron Biomedical',
-  ]
-  const row = [...items, ...items]
-  return (
-    <section className="relative py-6 bg-white border-y border-slate-100 overflow-hidden">
-      <div className="flex w-max animate-marquee motion-reduce:animate-none">
-        {row.map((label, i) => (
-          <span
-            key={i}
-            className="flex-shrink-0 mx-2.5 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-200 shadow-sm text-sm font-medium text-slate-600 whitespace-nowrap"
-          >
-            <span className={`w-1.5 h-1.5 rounded-full ${i % 2 === 0 ? 'bg-ox' : 'bg-ob'}`} />
-            {label}
-          </span>
-        ))}
-      </div>
-    </section>
-  )
-}
-
 /* ─── TESTIMONIAL ─── */
 function TestimonialSection() {
   return (
@@ -490,7 +515,6 @@ export default function App() {
     <div className="min-h-screen bg-white text-slate-900 antialiased selection:bg-ox/20">
       <Navbar />
       <HeroSection />
-      <KPIStrip />
 
       {/* Service sections */}
       {services.map((service, i) => (
@@ -500,6 +524,7 @@ export default function App() {
       <TestimonialSection />
       <CTASection />
       <FooterSection />
+      <ChatVoiceWidget />
     </div>
   )
 }
