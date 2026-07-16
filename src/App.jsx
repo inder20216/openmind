@@ -122,7 +122,7 @@ function HeroSection() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-extrabold leading-[1.15] tracking-tight text-slate-900"
           >
-            <span className="sm:whitespace-nowrap">Customer Experience Solutions</span><br />
+            <span>AI-Powered Customer Experience Solutions</span><br />
             <span className="sm:whitespace-nowrap bg-gradient-to-r from-ox via-purple-500 to-ob bg-clip-text text-transparent">
               That Fit Your Business
             </span>
@@ -136,7 +136,7 @@ function HeroSection() {
           >
             <span className="text-ox">Traditional Contact Centers</span> •{' '}
             <span className="text-ob">AI Automation</span> •{' '}
-            <span className="text-purple-600">Or the Perfect Hybrid</span>
+            <span className="text-purple-600">Hybrid Customer Support</span>
           </motion.p>
 
           <motion.p
@@ -382,7 +382,7 @@ function ServiceSection({ service, index }) {
 /* ─── TESTIMONIAL ─── */
 function TestimonialSection() {
   return (
-    <section className="py-20 md:py-28 px-6 md:px-16 bg-gradient-to-b from-slate-50 to-white">
+    <section id="case-studies" className="py-20 md:py-28 px-6 md:px-16 bg-gradient-to-b from-slate-50 to-white">
       <div className="max-w-3xl mx-auto text-center">
         <FadeInSection>
           <span className="text-xs font-semibold tracking-[0.2em] uppercase text-ox">Testimonial</span>
